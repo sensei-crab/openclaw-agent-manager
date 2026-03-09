@@ -1,0 +1,48 @@
+{
+  "name": "claw-agent-manager",
+  "version": "1.0.2",
+  "description": "Desktop GUI for managing OpenClaw agents and sessions.",
+  "main": "dist/main/main.js",
+  "scripts": {
+    "dev": "concurrently \"vite\" \"npm:dev:electron\"",
+    "dev:electron": "ts-node ./scripts/dev-electron.ts",
+    "build": "vite build && tsc -p tsconfig.main.json",
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder && node scripts/copy-dmg.js",
+    "test": "node scripts/smoke-check.js",
+    "recursive-test": "node scripts/recursive-test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "electron": "^40.7.0",
+    "@types/node": "^25.3.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.4",
+    "concurrently": "^9.2.1",
+    "electron-builder": "^26.8.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
+  },
+  "build": {
+    "appId": "ai.openclaw.clawagentmanager",
+    "productName": "Claw Agent Manager",
+    "files": [
+      "dist/main/**",
+      "dist/renderer/**",
+      "config/**"
+    ],
+    "directories": {
+      "buildResources": "public",
+      "output": "release"
+    }
+  }
+}

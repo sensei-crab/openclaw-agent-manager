@@ -1,0 +1,49 @@
+{
+  "theme": {
+    "palette": {
+      "bg": "#0b0f1a",
+      "accent": "#7c5cff",
+      "green": "#4cff5a",
+      "yellow": "#ffe66d",
+      "red": "#ff4d6d"
+    }
+  },
+  "layout": {
+    "stations": [
+      {
+        "id": "nav",
+        "x": 120,
+        "y": 140,
+        "agentId": "main"
+      },
+      {
+        "id": "ops",
+        "x": 360,
+        "y": 140
+      },
+      {
+        "id": "comms",
+        "x": 600,
+        "y": 140
+      },
+      {
+        "id": "eng",
+        "x": 240,
+        "y": 320
+      },
+      {
+        "id": "science",
+        "x": 480,
+        "y": 320
+      }
+    ],
+    "repairBay": {
+      "x": 900,
+      "y": 420
+    },
+    "breakRoom": {
+      "x": 620,
+      "y": 80
+    }
+  }
+}
