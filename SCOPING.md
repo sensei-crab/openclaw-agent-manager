@@ -1,5 +1,7 @@
 # Project Scoping — Claw Agent Manager
 
+**Priority:** Medium
+
 ## Goals
 - Deliver a GUI with feature‑parity to the OpenClaw CLI for controlling, managing, and monitoring agents.
 - Present the control surface as a “starship bridge” with 16‑bit iRobot‑style agents.
@@ -19,7 +21,7 @@
 - Non‑OpenClaw external integrations unless explicitly approved.
 
 ## Deliverables
-- Electron desktop app (macOS) with working GUI controls + monitoring.
+- Swift (macOS) desktop app with working GUI controls + monitoring.
 - Clear mapping from CLI commands to GUI actions.
 - Project-based stations with drag/drop assignment from Break Room.
 - New-project creation flow that creates a project folder and prompts scoping chat.
