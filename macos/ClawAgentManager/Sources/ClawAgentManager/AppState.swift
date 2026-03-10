@@ -1,0 +1,17 @@
+import SwiftUI
+
+@MainActor
+final class AppState: ObservableObject {
+    @Published var statusMessage: String = "Ready"
+    @Published var showAbout: Bool = false
+    @Published var errorMessage: String? = nil
+
+    func setStatus(_ message: String) {
+        statusMessage = message
+    }
+
+    func setError(_ message: String) {
+        statusMessage = "Error: \(message)"
+        errorMessage = message
+    }
+}
