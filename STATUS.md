@@ -104,3 +104,8 @@
 - Summary: Built release 0.1.18 bundle (version bump only).
 - Tests: `swift test --disable-sandbox -Xswiftc -gnone` (fails: no tests found); `./scripts/build-macos-release.sh` (success, 0.1.18); launched ClawAgentManager-0.1.18.app (open then quit). App bundle size: 1.0M. Menu/button interaction, open/close project, core flows, drag/drop, error paths, and full smoke test still not verifiable headlessly.
 - Blockers: Manual UI smoke test still required for launch/open/close project, core flows, menu and button interactions, drag/drop, and error paths; automated UI verification still blocked by System Events/Accessibility.
+
+## 2026-03-11 (16:35)
+- Summary: Logged UI smoke-test ticket; picked up pending UI nav updates (Agents/Projects/Settings tabs + project delete controls) and built release 0.1.19 bundle.
+- Tests: `swift test --disable-sandbox -Xswiftc -gnone` (fails: no tests found); `./scripts/build-macos-release.sh` (success, 0.1.19); launched ClawAgentManager-0.1.19.app (open then quit). App bundle size: 1.0M. Attempted menu verification via System Events: `Can’t get process "ClawAgentManager"`.
+- Blockers: Manual UI smoke test still required for launch/open/close project, core flows, menu and button interactions, drag/drop, and error paths; automated UI verification still blocked by System Events/Accessibility.

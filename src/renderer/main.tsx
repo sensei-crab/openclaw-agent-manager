@@ -11,6 +11,7 @@ const statusColor = (status: string) => {
 
 const App = () => {
   const [config, setConfig] = useState<any>(null);
+  const [activeMenu, setActiveMenu] = useState<'agents' | 'projects' | 'settings'>('agents');
   const [agents, setAgents] = useState<any[]>([]);
   const [projects, setProjects] = useState<any[]>([]);
   const [assignments, setAssignments] = useState<Record<string, string>>({});
@@ -131,6 +132,20 @@ const App = () => {
     } else {
       appendLog(`[project] ERR ${res?.stderr || res?.error || 'create failed'}`.trim());
     }
+  };
+
+  const runDeleteProject = async (slug: string) => {
+    if (!slug) return;
+    if (!confirm(`DELETE PROJECT ${slug}?
+This will move the project to Trash.`)) return;
+    const typed = prompt(`Type the project slug to confirm deletion: ${slug}`) || '';
+    if (typed.trim() !== slug) {
+      appendLog(`[project delete ${slug}] ABORTED (slug mismatch)`);
+      return;
+    }
+    const res = await window.claw.deleteProject(slug);
+    appendLog(`[project delete ${slug}] ${res.ok ? 'OK' : 'ERR'} ${res.stderr || res.stdout || ''}`.trim());
+    refresh();
   };
 
   const assignAgentToProject = async (projectSlug: string, agentId: string) => {
@@ -281,7 +296,13 @@ This is destructive and cannot be undone.`)) return;
 
 
   return (
-    <div className="app">
+    <div className="app-shell">
+      <div className="top-nav">
+        <button className={activeMenu === 'agents' ? 'nav-button active' : 'nav-button'} onClick={() => setActiveMenu('agents')}>AGENTS</button>
+        <button className={activeMenu === 'projects' ? 'nav-button active' : 'nav-button'} onClick={() => setActiveMenu('projects')}>PROJECTS</button>
+        <button className={activeMenu === 'settings' ? 'nav-button active' : 'nav-button'} onClick={() => setActiveMenu('settings')}>SETTINGS</button>
+      </div>
+      <div className="app">
       {showScopePrompt && (
         <div className="modal">
           <div className="modal-card">
@@ -363,6 +384,8 @@ This is destructive and cannot be undone.`)) return;
       </div>
 
       <div className="side-panel">
+        {activeMenu === 'agents' && (
+          <>
         <div className="panel">
           <h2 style={{ fontSize: 12, marginTop: 0 }}>Agent Monitor</h2>
           {agents.map((a) => (
@@ -390,14 +413,6 @@ This is destructive and cannot be undone.`)) return;
         <div className="panel">
           <h2 style={{ fontSize: 12, marginTop: 0 }}>Actions</h2>
           <div className="actions">
-            <div>
-              <div className="tiny-label">Create Project</div>
-              <div className="row">
-                <input placeholder="project name" value={newProjectName} onChange={(e) => setNewProjectName(e.target.value)} />
-              </div>
-              <button onClick={runCreateProject}>CREATE PROJECT</button>
-            </div>
-
             <div>
               <div className="tiny-label">Add Agent</div>
               <div className="row">
@@ -484,7 +499,43 @@ This is destructive and cannot be undone.`)) return;
             </div>
           </div>
         </div>
+          </>
+        )}
 
+        {activeMenu === 'projects' && (
+          <>
+            <div className="panel">
+              <h2 style={{ fontSize: 12, marginTop: 0 }}>Projects</h2>
+              <div className="actions">
+                <div>
+                  <div className="tiny-label">Create Project</div>
+                  <div className="row">
+                    <input placeholder="project name" value={newProjectName} onChange={(e) => setNewProjectName(e.target.value)} />
+                  </div>
+                  <button onClick={runCreateProject}>CREATE PROJECT</button>
+                </div>
+                <div>
+                  <div className="tiny-label">Existing Projects</div>
+                  {projects.length === 0 ? (
+                    <div className="tiny-label" style={{ marginTop: 6 }}>No projects yet</div>
+                  ) : (
+                    <div className="log" style={{ marginTop: 6 }}>
+                      {projects.map((p: any) => (
+                        <div key={p.slug || p.name} style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'space-between' }}>
+                          <span>{p.name || p.slug}</span>
+                          <button className="tiny-button" onClick={() => runDeleteProject(p.slug)}>DELETE</button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {activeMenu === 'settings' && (
+          <>
         <div className="panel">
           <h2 style={{ fontSize: 12, marginTop: 0 }}>Build & Tests</h2>
           <div className="status-grid">
@@ -505,7 +556,10 @@ This is destructive and cannot be undone.`)) return;
           <h2 style={{ fontSize: 12, marginTop: 0 }}>System Log</h2>
           <div className="log">{logLines.map((l, i) => (<div key={i}>{l}</div>))}</div>
         </div>
+          </>
+        )}
 
+        {activeMenu === 'agents' && (
         <div className="panel">
           <h2 style={{ fontSize: 12, marginTop: 0 }}>Support Bays</h2>
           <div className="bays">
