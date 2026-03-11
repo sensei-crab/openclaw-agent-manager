@@ -29,3 +29,8 @@
 - Summary: Built release 0.1.10 bundle.
 - Tests: `swift test` (fails: no tests found); `./scripts/build-macos-release.sh` (success); launched 0.1.10 app; attempted AppleScript menu click (System Events menu bar not accessible / hung). App bundle size: 1.0M.
 - Blockers: Automated menu/button verification still blocked by System Events/Accessibility; manual UI smoke test still needed for full checklist (open/close project, core flows, button interactions, error paths).
+
+## 2026-03-10 (23:26)
+- Summary: Added Create Project sheet wired to menu bar/File menu for project creation flow.
+- Tests: `swift run` (build + launch). Unable to verify menu/button interactions, project open/close, or error paths headlessly; needs manual UI smoke test.
+- Blockers: Manual UI verification still required for menu/button interactions, open/close project, core flows, error paths.

@@ -70,6 +70,11 @@ struct ContentView: View {
                 openProject(selected)
             }
         }
+        .sheet(isPresented: $appState.showCreateProject) {
+            CreateProjectSheet(name: $createProjectName) {
+                createProject()
+            }
+        }
         .alert("Delete Agent", isPresented: Binding(
             get: { pendingDelete != nil },
             set: { newValue in
@@ -635,6 +640,32 @@ private struct OpenProjectSheet: View {
                 .frame(maxHeight: 240)
             }
             Button("Cancel") { dismiss() }
+        }
+        .padding(20)
+        .frame(width: 360)
+    }
+}
+
+private struct CreateProjectSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @Binding var name: String
+    let onCreate: () -> Void
+
+    var body: some View {
+        VStack(spacing: 12) {
+            Text("Create Project").font(.title2)
+            TextField("Project name", text: $name)
+                .textFieldStyle(.roundedBorder)
+            HStack {
+                Button("Cancel") { dismiss() }
+                Button("Create") {
+                    let trimmed = name.trimmingCharacters(in: .whitespaces)
+                    guard !trimmed.isEmpty else { return }
+                    name = trimmed
+                    onCreate()
+                    dismiss()
+                }
+            }
         }
         .padding(20)
         .frame(width: 360)
