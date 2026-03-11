@@ -114,3 +114,8 @@
 - Summary: Built release 0.1.20 bundle; attempted menu verification via System Events (still blocked).
 - Tests: `./scripts/build-macos-release.sh` (success, 0.1.20); launched ClawAgentManager-0.1.20.app (open then quit); `osascript` menu bar query failed: `Can’t get process "ClawAgentManager"`. App bundle size: 1.0M. Launch/open/close project, core flows, menu/button interactions, drag/drop, error paths, and full smoke test still not verifiable headlessly.
 - Blockers: Manual UI smoke test still required for launch/open/close project, core flows, menu and button interactions, drag/drop, and error paths; automated UI verification blocked by System Events/Accessibility.
+
+## 2026-03-11 (18:41)
+- Summary: Built release 0.1.21 bundle (version bump via build script); launched app briefly for smoke sanity. No code changes.
+- Tests: `swift test --disable-sandbox -Xswiftc -gnone` (fails: no tests found); `./scripts/build-macos-release.sh` (success, 0.1.21); launched ClawAgentManager-0.1.21.app (open then quit). App bundle size: 1.0M.
+- Blockers: Manual UI smoke test still required for launch/open/close project, core flows, menu and button interactions, drag/drop, and error paths; automated UI verification blocked by System Events/Accessibility.
