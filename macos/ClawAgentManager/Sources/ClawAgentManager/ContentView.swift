@@ -1,4 +1,5 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct ContentView: View {
     @EnvironmentObject private var appState: AppState
@@ -28,9 +29,12 @@ struct ContentView: View {
                         case .agents:
                             AgentsView(agents: agents, onDelete: requestDelete)
                         case .projects:
-                            ProjectsView(projects: projects, assignments: assignments, agents: agents, onOpenProject: {
-                                appState.showOpenProject = true
-                            }, onCloseProject: closeProject)
+                            ProjectsView(projects: projects,
+                                         assignments: assignments,
+                                         agents: agents,
+                                         onOpenProject: { appState.showOpenProject = true },
+                                         onCloseProject: closeProject,
+                                         onAssignAgent: assignAgent)
                         case .settings:
                             SettingsView(createProjectName: $createProjectName,
                                          onCreateProject: createProject,
@@ -191,6 +195,24 @@ struct ContentView: View {
         appState.setStatus("Closed active project")
         Task { await refreshAll() }
     }
+
+    private func assignAgent(_ agentId: String, _ stationId: String) {
+        guard let activeSlug = assignments.activeProject else {
+            appState.setError("No active project selected")
+            return
+        }
+        guard var projectAssignments = assignments.projects[activeSlug] else {
+            appState.setError("Missing assignments for \(activeSlug)")
+            return
+        }
+        guard let index = projectAssignments.stations.firstIndex(where: { $0.id == stationId }) else { return }
+        projectAssignments.stations[index].agentId = agentId
+        assignments.projects[activeSlug] = projectAssignments
+        ProjectsStore.saveAssignments(assignments)
+        let agentName = agents.first(where: { $0.id == agentId })?.displayName ?? agentId
+        appendLog("[assign] \(agentName) → \(stationId)")
+        appState.setStatus("Assigned \(agentName) to \(stationId)")
+    }
 }
 
 private enum TopTab: String, CaseIterable, Identifiable {
@@ -253,6 +275,7 @@ private struct ProjectsView: View {
     let agents: [AgentModel]
     let onOpenProject: () -> Void
     let onCloseProject: () -> Void
+    let onAssignAgent: (String, String) -> Void
 
     var body: some View {
         Panel(title: "Project Bridge") {
@@ -277,7 +300,7 @@ private struct ProjectsView: View {
                     .controlSize(.small)
                 }
 
-                BridgeGridView(projects: projects, assignments: assignments, agents: agents)
+                BridgeGridView(projects: projects, assignments: assignments, agents: agents, onAssignAgent: onAssignAgent)
             }
         }
     }
@@ -354,13 +377,14 @@ private struct BridgeGridView: View {
     let projects: [ProjectInfo]
     let assignments: AssignmentsFile
     let agents: [AgentModel]
+    let onAssignAgent: (String, String) -> Void
 
     var body: some View {
         let activeSlug = assignments.activeProject
         let stations = activeSlug.flatMap { assignments.projects[$0]?.stations } ?? []
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 120), spacing: 16)], spacing: 16) {
             ForEach(stations) { station in
-                StationView(station: station, agents: agents)
+                StationView(station: station, agents: agents, onAssignAgent: onAssignAgent)
             }
         }
     }
@@ -369,6 +393,8 @@ private struct BridgeGridView: View {
 private struct StationView: View {
     let station: Station
     let agents: [AgentModel]
+    let onAssignAgent: (String, String) -> Void
+    @State private var isTargeted: Bool = false
 
     var body: some View {
         let agent = agents.first(where: { $0.id == station.agentId })
@@ -385,9 +411,19 @@ private struct StationView: View {
         .frame(width: 120, height: 120)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(Color(red: 0.173, green: 0.227, blue: 0.365), lineWidth: 3)
+                .stroke(isTargeted ? Theme.accent : Color(red: 0.173, green: 0.227, blue: 0.365), lineWidth: 3)
                 .background(RoundedRectangle(cornerRadius: 10).fill(Color(red: 0.055, green: 0.078, blue: 0.141)))
         )
+        .onDrop(of: [UTType.plainText], isTargeted: $isTargeted) { providers in
+            guard let provider = providers.first(where: { $0.canLoadObject(ofClass: String.self) }) else { return false }
+            _ = provider.loadObject(ofClass: String.self) { value, _ in
+                guard let agentId = value else { return }
+                DispatchQueue.main.async {
+                    onAssignAgent(agentId, station.id)
+                }
+            }
+            return true
+        }
     }
 
     private func statusLight(color: Color) -> some View {
@@ -511,9 +547,9 @@ private struct SupportBaysView: View {
         let issue = agents.filter { ($0.status ?? "") == "issue" }
 
         HStack(spacing: 10) {
-            BayView(title: "BREAK ROOM (\(idle.count))", color: Theme.yellow)
-            BayView(title: "ACTIVE PATROL (\(working.count))", color: Theme.green)
-            BayView(title: "REPAIR BAY (\(issue.count))", color: Theme.red)
+            BayView(title: "BREAK ROOM (\(idle.count))", color: Theme.yellow, agents: idle, draggable: true)
+            BayView(title: "ACTIVE PATROL (\(working.count))", color: Theme.green, agents: working, draggable: false)
+            BayView(title: "REPAIR BAY (\(issue.count))", color: Theme.red, agents: issue, draggable: false)
         }
     }
 }
@@ -521,15 +557,61 @@ private struct SupportBaysView: View {
 private struct BayView: View {
     let title: String
     let color: Color
+    let agents: [AgentModel]
+    let draggable: Bool
 
     var body: some View {
         VStack(spacing: 6) {
             Text(title).pixelFont(size: 10)
             AgentAvatarView(color: color)
+            if agents.isEmpty {
+                Text("—").pixelFont(size: 8).foregroundStyle(.secondary)
+            } else {
+                ScrollView {
+                    VStack(spacing: 4) {
+                        ForEach(agents) { agent in
+                            AgentPill(agent: agent, color: color, draggable: draggable)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .frame(maxHeight: 120)
+            }
         }
-        .frame(maxWidth: .infinity, minHeight: 140)
+        .frame(maxWidth: .infinity, minHeight: 180)
         .padding(6)
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(color, style: StrokeStyle(lineWidth: 3, dash: [6])))
+    }
+}
+
+private struct AgentPill: View {
+    let agent: AgentModel
+    let color: Color
+    let draggable: Bool
+
+    var body: some View {
+        let pill = HStack(spacing: 6) {
+            RoundedRectangle(cornerRadius: 3)
+                .fill(color)
+                .frame(width: 8, height: 8)
+            Text(agent.displayName)
+                .pixelFont(size: 8)
+            Spacer(minLength: 0)
+        }
+        .padding(.vertical, 2)
+        .padding(.horizontal, 4)
+        .background(RoundedRectangle(cornerRadius: 6).fill(Color.black.opacity(0.25)))
+        .overlay(RoundedRectangle(cornerRadius: 6).stroke(color.opacity(0.6), lineWidth: 1))
+
+        if draggable {
+            pill.onDrag {
+                let provider = NSItemProvider(object: agent.id as NSString)
+                provider.suggestedName = agent.displayName
+                return provider
+            }
+        } else {
+            pill
+        }
     }
 }
 

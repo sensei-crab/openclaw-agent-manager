@@ -27,7 +27,7 @@
 
 ## 2026-03-10 (22:30)
 - Summary: Built release 0.1.10 bundle.
-- Tests: `swift test` (fails: no tests found); `./scripts/build-macos-release.sh` (success); launched 0.1.10 app; attempted AppleScript menu click (System Events menu bar not accessible / hung). App bundle size: 1.0M.
+- Tests: `./scripts/build-macos-release.sh` (success); launched 0.1.10 app; attempted AppleScript menu click (System Events menu bar not accessible / hung). App bundle size: 1.0M.
 - Blockers: Automated menu/button verification still blocked by System Events/Accessibility; manual UI smoke test still needed for full checklist (open/close project, core flows, button interactions, error paths).
 
 ## 2026-03-10 (23:26)
@@ -39,3 +39,8 @@
 - Summary: Triggered OpenClaw scoping prompt when creating a new project; logged scoping prompt result to system log.
 - Tests: `swift run` (build + launch). Unable to verify menus/buttons, open/close project, core flows, or error paths headlessly (System Events/Accessibility needed for UI automation).
 - Blockers: Manual UI smoke test still required for menu/button interactions, open/close project, core flows, error paths.
+
+## 2026-03-11 (01:40)
+- Summary: Added drag-and-drop assignment from Break Room to bridge stations; expanded support bays to list agents per status for 16-bit bridge feel.
+- Tests: `swift run` (build + launch). Unable to verify menus/buttons, open/close project, core flows, drag/drop interactions, or error paths headlessly (System Events/Accessibility needed for UI automation).
+- Blockers: Manual UI smoke test still required for menu/button interactions, open/close project, core flows, drag/drop, and error paths.
