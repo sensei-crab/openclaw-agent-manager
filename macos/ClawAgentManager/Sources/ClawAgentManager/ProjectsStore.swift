@@ -25,7 +25,9 @@ struct ProjectAssignments: Codable {
 }
 
 struct ProjectsStore {
-    static let projectsDir = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Documents/OpenClaw/Projects")
+    static var projectsDir: URL {
+        DocumentAccessStore.shared.projectsURL()
+    }
     static let assignmentsPath: URL = {
         let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let dir = support.appendingPathComponent("ClawAgentManager")
@@ -35,6 +37,7 @@ struct ProjectsStore {
 
     static func listProjects() -> [ProjectInfo] {
         let fm = FileManager.default
+        ensureProjectsDirectory()
         guard let entries = try? fm.contentsOfDirectory(at: projectsDir, includingPropertiesForKeys: nil) else { return [] }
         let dirs = entries.filter { $0.hasDirectoryPath && !$0.lastPathComponent.hasPrefix(".") }
         return dirs.map { url in
@@ -92,6 +95,7 @@ struct ProjectsStore {
         if slug.isEmpty {
             return (false, "Project name must include letters or numbers.", nil)
         }
+        ensureProjectsDirectory()
         let projectDir = projectsDir.appendingPathComponent(slug)
         if FileManager.default.fileExists(atPath: projectDir.path) {
             return (false, "Project already exists: \(slug)", nil)
@@ -129,6 +133,13 @@ struct ProjectsStore {
     static func saveAssignments(_ data: AssignmentsFile) {
         if let raw = try? JSONEncoder().encode(data) {
             try? raw.write(to: assignmentsPath)
+        }
+    }
+
+    static func ensureProjectsDirectory() {
+        let fm = FileManager.default
+        if !fm.fileExists(atPath: projectsDir.path) {
+            try? fm.createDirectory(at: projectsDir, withIntermediateDirectories: true)
         }
     }
 

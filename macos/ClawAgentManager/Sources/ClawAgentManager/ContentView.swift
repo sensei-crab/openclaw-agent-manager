@@ -4,15 +4,16 @@ struct ContentView: View {
     @EnvironmentObject private var appState: AppState
 
     @State private var logLines: [String] = ["Live agent telemetry updating every 5s…"]
-    @State private var activeTab: TopTab = .agents
     @State private var logExpanded: Bool = false
 
     @State private var agents: [AgentModel] = []
     @State private var projects: [ProjectInfo] = []
     @State private var assignments: AssignmentsFile = AssignmentsFile(activeProject: nil, projects: [:])
-
+    @State private var activeTab: TopTab = .agents
     @State private var createProjectName: String = ""
+
     @State private var pendingDelete: AgentModel? = nil
+    @State private var hasWarnedAccess: Bool = false
 
     var body: some View {
         ZStack {

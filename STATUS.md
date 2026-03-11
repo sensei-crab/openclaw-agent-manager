@@ -19,3 +19,8 @@
 - Summary: Built release 0.1.8 bundle.
 - Tests: `./scripts/build-macos-release.sh` (success); launched 0.1.8 app; attempted AppleScript menu click (System Events menu bar not accessible). App bundle size: 988K.
 - Blockers: Automated menu/button verification still blocked by System Events/Accessibility; manual UI smoke test still needed for full checklist.
+
+## 2026-03-10 (21:35)
+- Summary: Fixed missing ContentView state, built release 0.1.9 bundle.
+- Tests: `swift test` (fails: no tests found); `./scripts/build-macos-release.sh` (success); launched 0.1.9 app; attempted AppleScript menu click (System Events menu bar not accessible). App bundle size: 1.0M.
+- Blockers: Automated menu/button verification still blocked by System Events/Accessibility; manual UI smoke test still needed for full checklist (open/close project, core flows, button interactions, error paths).

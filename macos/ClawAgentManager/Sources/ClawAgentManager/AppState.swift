@@ -5,6 +5,7 @@ final class AppState: ObservableObject {
     @Published var statusMessage: String = "Ready"
     @Published var showAbout: Bool = false
     @Published var showAddAgent: Bool = false
+    @Published var showCreateProject: Bool = false
     @Published var showOpenProject: Bool = false
     @Published var errorMessage: String? = nil
     @Published var requestRefresh: Bool = false
