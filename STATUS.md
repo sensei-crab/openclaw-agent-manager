@@ -64,3 +64,8 @@
 - Summary: Investigated Swift build hang; `swift build` repeatedly stalls during link/dsymutil stage (after Objects.LinkFileList). `swift build -v` shows swift-driver link invocation but process never completes.
 - Tests: `swift package clean`; `swift build` (hangs at link; terminated); `swift build -v` (hangs at link; terminated). Launch/open/close/core flows/menus/buttons/error paths/smoke test not executed in this run (headless + no UI automation).
 - Blockers: Swift build hangs at link/dsymutil; need to diagnose (possible dsymutil stall). Manual UI smoke test still required for menu/button interactions, open/close project, core flows, drag/drop, and error paths; no automated UI access (System Events/Accessibility).
+
+## 2026-03-11 (06:45)
+- Summary: Swift debug build succeeds when disabling debug info (`-Xswiftc -gnone`); standard debug build still hangs at link/dsymutil. Cleared .build and killed stale dsymutil/swift-driver processes.
+- Tests: `swift build -c debug --disable-sandbox -Xswiftc -gnone` (success); `swift test --disable-sandbox -Xswiftc -gnone` (fails: no tests found). Launch/open/close/core flows/menus/buttons/error paths/smoke test not executed (headless + no UI automation). Release build skipped (outside 08:00–23:00).
+- Blockers: Manual UI smoke test still required for menu/button interactions, open/close project, core flows, drag/drop, and error paths; automated UI access blocked by System Events/Accessibility. Debug build hangs unless `-Xswiftc -gnone` is used (dsymutil stall).
