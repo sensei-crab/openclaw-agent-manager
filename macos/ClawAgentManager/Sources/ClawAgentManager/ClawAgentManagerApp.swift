@@ -16,33 +16,29 @@ struct ClawAgentManagerApp: App {
                 }
             }
             CommandMenu("File") {
-                Button("New") {
-                    appState.setStatus("New project")
-                }
-                .keyboardShortcut("n")
-
-                Button("Open…") {
-                    appState.setStatus("Open project…")
+                Button("Open Project…") {
+                    appState.showOpenProject = true
                 }
                 .keyboardShortcut("o")
-
-                Button("Close") {
-                    appState.setStatus("Close project")
+                Button("Close Project") {
+                    appState.requestCloseProject = true
                 }
-                .keyboardShortcut("w")
-
-                Divider()
-
-                Button("Save") {
-                    appState.setStatus("Save")
-                }
-                .keyboardShortcut("s")
+                .keyboardShortcut("w", modifiers: [.command, .shift])
             }
-            CommandMenu("View") {
-                Button("Reload") {
-                    appState.setStatus("Reload")
+            CommandMenu("Agents") {
+                Button("Add Agent…") {
+                    appState.showAddAgent = true
+                }
+                .keyboardShortcut("n")
+                Button("Refresh Agents") {
+                    appState.requestRefresh = true
                 }
                 .keyboardShortcut("r")
+            }
+            CommandMenu("Projects") {
+                Button("Refresh Projects") {
+                    appState.requestRefresh = true
+                }
             }
             CommandMenu("Help") {
                 Button("ClawAgentManager Help") {
