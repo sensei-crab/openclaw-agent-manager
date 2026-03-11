@@ -79,3 +79,8 @@
 - Summary: Updated Project Bridge to treat projects as bridge stations (with active highlight), added “Select / Create Project” action station for single-project case, and made pixel sprite render as fixed 16x16 grid for crisp 16-bit look. Release build script now disables debug info to avoid dsymutil/link hangs.
 - Tests: `./scripts/build-macos-release.sh` (success, 0.1.13); launched ClawAgentManager-0.1.13.app; attempted menu bar access via AppleScript (System Events error: no menu bar index). App bundle size: 1.0M.
 - Blockers: Manual UI smoke test still required for menu/button interactions, open/close project, core flows, drag/drop, and error paths; System Events/Accessibility still blocks automated UI verification.
+
+## 2026-03-11 (11:30)
+- Summary: Built release 0.1.14 bundle (version bump only).
+- Tests: `./scripts/build-macos-release.sh` (success, 0.1.14); launched ClawAgentManager-0.1.14.app (open then quit). App bundle size: 1.0M.
+- Blockers: Manual UI smoke test still required for launch/open/close project, core flows, menu and button interactions, drag/drop, and error paths; automated UI verification still blocked by System Events/Accessibility.
