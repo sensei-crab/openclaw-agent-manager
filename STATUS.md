@@ -69,3 +69,8 @@
 - Summary: Swift debug build succeeds when disabling debug info (`-Xswiftc -gnone`); standard debug build still hangs at link/dsymutil. Cleared .build and killed stale dsymutil/swift-driver processes.
 - Tests: `swift build -c debug --disable-sandbox -Xswiftc -gnone` (success); `swift test --disable-sandbox -Xswiftc -gnone` (fails: no tests found). Launch/open/close/core flows/menus/buttons/error paths/smoke test not executed (headless + no UI automation). Release build skipped (outside 08:00–23:00).
 - Blockers: Manual UI smoke test still required for menu/button interactions, open/close project, core flows, drag/drop, and error paths; automated UI access blocked by System Events/Accessibility. Debug build hangs unless `-Xswiftc -gnone` is used (dsymutil stall).
+
+## 2026-03-11 (07:55)
+- Summary: Tried to address debug link hang by adding `-gnone` to Package.swift debug swiftSettings. Standard `swift build` still hangs at link/dsymutil; `swift build -Xswiftc -gnone` succeeds. Cleaned up attempted linker flag (`-no_dsymutil`) after it failed.
+- Tests: `swift build` (hangs at link/dsymutil; terminated); `swift build -Xlinker -no_dsymutil` (fails: unknown linker option); `swift build -Xswiftc -gnone` (success). Launch/open/close/core flows/menus/buttons/error paths/smoke test not executed (headless + no UI automation). Release build skipped (before 08:00).
+- Blockers: Manual UI smoke test still required for menu/button interactions, open/close project, core flows, drag/drop, and error paths; automated UI access blocked by System Events/Accessibility. Debug build still hangs unless `-Xswiftc -gnone` is used.

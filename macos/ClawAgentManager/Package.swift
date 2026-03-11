@@ -10,7 +10,10 @@ let package = Package(
   targets: [
     .executableTarget(
       name: "ClawAgentManager",
-      resources: [.process("Resources")]
+      resources: [.process("Resources")],
+      swiftSettings: [
+        .unsafeFlags(["-gnone"], .when(configuration: .debug))
+      ]
     )
   ]
 )
