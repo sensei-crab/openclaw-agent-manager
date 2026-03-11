@@ -44,3 +44,8 @@
 - Summary: Added drag-and-drop assignment from Break Room to bridge stations; expanded support bays to list agents per status for 16-bit bridge feel.
 - Tests: `swift run` (build + launch). Unable to verify menus/buttons, open/close project, core flows, drag/drop interactions, or error paths headlessly (System Events/Accessibility needed for UI automation).
 - Blockers: Manual UI smoke test still required for menu/button interactions, open/close project, core flows, drag/drop, and error paths.
+
+## 2026-03-11 (02:31)
+- Summary: Ran Swift build/tests to keep pipeline warm; no code changes. Release build skipped (outside 08:00–23:00 window).
+- Tests: `swift test` (fails: no tests found); `swift build` (success). Launch/open/close/core flows/menus/buttons/error paths/smoke test not executed in this run (headless + no UI automation).
+- Blockers: Manual UI smoke test still required for menu/button interactions, open/close project, core flows, drag/drop, and error paths; no automated UI access (System Events/Accessibility).
