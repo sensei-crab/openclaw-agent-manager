@@ -14,3 +14,8 @@
 - Summary: Wired project create/open/close flows, delete agent confirmation, status panel, pixelated agent sprite; added File menu and open project sheet; built release 0.1.6 bundle.
 - Tests: `swift test` (fails: no tests found); `./scripts/build-macos-release.sh` (success); launched 0.1.6 app; attempted AppleScript menu click (System Events menu bar not accessible). App bundle size: 1.0M.
 - Blockers: System Events/Accessibility prevented automated menu/button verification; manual UI smoke test still needed for full checklist.
+
+## 2026-03-10 (20:51)
+- Summary: Built release 0.1.8 bundle.
+- Tests: `./scripts/build-macos-release.sh` (success); launched 0.1.8 app; attempted AppleScript menu click (System Events menu bar not accessible). App bundle size: 988K.
+- Blockers: Automated menu/button verification still blocked by System Events/Accessibility; manual UI smoke test still needed for full checklist.
