@@ -20,9 +20,9 @@ PATCH=$((PATCH + 1))
 NEW_VERSION="$MAJOR.$MINOR.$PATCH"
 echo "$NEW_VERSION" > "$VERSION_FILE"
 
-# Build
+# Build (disable debug info to avoid dsymutil/link hangs)
 cd "$APP_DIR"
-swift build -c release
+swift build -c release -Xswiftc -gnone
 
 # Package as a basic .app bundle placeholder (SwiftPM binary)
 APP_NAME="ClawAgentManager"

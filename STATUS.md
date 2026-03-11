@@ -74,3 +74,8 @@
 - Summary: Tried to address debug link hang by adding `-gnone` to Package.swift debug swiftSettings. Standard `swift build` still hangs at link/dsymutil; `swift build -Xswiftc -gnone` succeeds. Cleaned up attempted linker flag (`-no_dsymutil`) after it failed.
 - Tests: `swift build` (hangs at link/dsymutil; terminated); `swift build -Xlinker -no_dsymutil` (fails: unknown linker option); `swift build -Xswiftc -gnone` (success). Launch/open/close/core flows/menus/buttons/error paths/smoke test not executed (headless + no UI automation). Release build skipped (before 08:00).
 - Blockers: Manual UI smoke test still required for menu/button interactions, open/close project, core flows, drag/drop, and error paths; automated UI access blocked by System Events/Accessibility. Debug build still hangs unless `-Xswiftc -gnone` is used.
+
+## 2026-03-11 (10:20)
+- Summary: Updated Project Bridge to treat projects as bridge stations (with active highlight), added “Select / Create Project” action station for single-project case, and made pixel sprite render as fixed 16x16 grid for crisp 16-bit look. Release build script now disables debug info to avoid dsymutil/link hangs.
+- Tests: `./scripts/build-macos-release.sh` (success, 0.1.13); launched ClawAgentManager-0.1.13.app; attempted menu bar access via AppleScript (System Events error: no menu bar index). App bundle size: 1.0M.
+- Blockers: Manual UI smoke test still required for menu/button interactions, open/close project, core flows, drag/drop, and error paths; System Events/Accessibility still blocks automated UI verification.

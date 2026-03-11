@@ -34,7 +34,9 @@ struct ContentView: View {
                                          agents: agents,
                                          onOpenProject: { appState.showOpenProject = true },
                                          onCloseProject: closeProject,
-                                         onAssignAgent: assignAgent)
+                                         onCreateProject: { appState.showCreateProject = true },
+                                         onSelectProject: openProject,
+                                         onAssignAgent: assignAgentToProject)
                         case .settings:
                             SettingsView(createProjectName: $createProjectName,
                                          onCreateProject: createProject,
@@ -196,22 +198,26 @@ struct ContentView: View {
         Task { await refreshAll() }
     }
 
-    private func assignAgent(_ agentId: String, _ stationId: String) {
-        guard let activeSlug = assignments.activeProject else {
-            appState.setError("No active project selected")
+    private func assignAgentToProject(_ agentId: String, _ projectSlug: String) {
+        guard let project = projects.first(where: { $0.slug == projectSlug }) else {
+            appState.setError("Unknown project \(projectSlug)")
             return
         }
-        guard var projectAssignments = assignments.projects[activeSlug] else {
-            appState.setError("Missing assignments for \(activeSlug)")
+        if assignments.projects[projectSlug] == nil {
+            assignments.projects[projectSlug] = ProjectAssignments(stations: ProjectsStore.defaultStations())
+        }
+        guard var projectAssignments = assignments.projects[projectSlug],
+              !projectAssignments.stations.isEmpty else {
+            appState.setError("Missing stations for \(projectSlug)")
             return
         }
-        guard let index = projectAssignments.stations.firstIndex(where: { $0.id == stationId }) else { return }
-        projectAssignments.stations[index].agentId = agentId
-        assignments.projects[activeSlug] = projectAssignments
+        projectAssignments.stations[0].agentId = agentId
+        assignments.projects[projectSlug] = projectAssignments
+        assignments.activeProject = projectSlug
         ProjectsStore.saveAssignments(assignments)
         let agentName = agents.first(where: { $0.id == agentId })?.displayName ?? agentId
-        appendLog("[assign] \(agentName) → \(stationId)")
-        appState.setStatus("Assigned \(agentName) to \(stationId)")
+        appendLog("[assign] \(agentName) → \(project.slug)")
+        appState.setStatus("Assigned \(agentName) to \(project.name)")
     }
 }
 
@@ -275,6 +281,8 @@ private struct ProjectsView: View {
     let agents: [AgentModel]
     let onOpenProject: () -> Void
     let onCloseProject: () -> Void
+    let onCreateProject: () -> Void
+    let onSelectProject: (String) -> Void
     let onAssignAgent: (String, String) -> Void
 
     var body: some View {
@@ -300,7 +308,13 @@ private struct ProjectsView: View {
                     .controlSize(.small)
                 }
 
-                BridgeGridView(projects: projects, assignments: assignments, agents: agents, onAssignAgent: onAssignAgent)
+                ProjectStationsView(projects: projects,
+                                   assignments: assignments,
+                                   agents: agents,
+                                   onSelectProject: onSelectProject,
+                                   onAssignAgent: onAssignAgent,
+                                   onOpenProject: onOpenProject,
+                                   onCreateProject: onCreateProject)
             }
         }
     }
@@ -373,53 +387,71 @@ private struct Panel<Content: View>: View {
     }
 }
 
-private struct BridgeGridView: View {
+private struct ProjectStationsView: View {
     let projects: [ProjectInfo]
     let assignments: AssignmentsFile
     let agents: [AgentModel]
+    let onSelectProject: (String) -> Void
     let onAssignAgent: (String, String) -> Void
+    let onOpenProject: () -> Void
+    let onCreateProject: () -> Void
 
     var body: some View {
-        let activeSlug = assignments.activeProject
-        let stations = activeSlug.flatMap { assignments.projects[$0]?.stations } ?? []
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 120), spacing: 16)], spacing: 16) {
-            ForEach(stations) { station in
-                StationView(station: station, agents: agents, onAssignAgent: onAssignAgent)
+        let showActionStation = projects.count == 1
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
+            ForEach(projects) { project in
+                ProjectStationView(project: project,
+                                   assignments: assignments,
+                                   agents: agents,
+                                   isActive: assignments.activeProject == project.slug,
+                                   onSelectProject: onSelectProject,
+                                   onAssignAgent: onAssignAgent)
+            }
+            if showActionStation {
+                ProjectActionStation(onOpenProject: onOpenProject, onCreateProject: onCreateProject)
             }
         }
     }
 }
 
-private struct StationView: View {
-    let station: Station
+private struct ProjectStationView: View {
+    let project: ProjectInfo
+    let assignments: AssignmentsFile
     let agents: [AgentModel]
+    let isActive: Bool
+    let onSelectProject: (String) -> Void
     let onAssignAgent: (String, String) -> Void
     @State private var isTargeted: Bool = false
 
     var body: some View {
-        let agent = agents.first(where: { $0.id == station.agentId })
-        let statusColor = statusColorFor(agent?.status)
+        let assignedAgentId = assignments.projects[project.slug]?.stations.first?.agentId
+        let assignedAgent = assignedAgentId.flatMap { id in agents.first(where: { $0.id == id }) }
+        let statusColor = statusColorFor(assignedAgent?.status)
         VStack(spacing: 6) {
             AgentAvatarView(color: statusColor)
             statusLight(color: statusColor)
-            Text(agent?.displayName ?? "UNASSIGNED")
+            Text(project.name.uppercased())
                 .pixelFont(size: 8)
-            Text(station.id)
+                .multilineTextAlignment(.center)
+            Text(assignedAgent?.displayName ?? "UNASSIGNED")
                 .pixelFont(size: 8)
                 .foregroundStyle(.secondary)
         }
-        .frame(width: 120, height: 120)
+        .frame(width: 160, height: 140)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(isTargeted ? Theme.accent : Color(red: 0.173, green: 0.227, blue: 0.365), lineWidth: 3)
+                .stroke(isTargeted ? Theme.accent : (isActive ? Theme.accent.opacity(0.9) : Color(red: 0.173, green: 0.227, blue: 0.365)), lineWidth: 3)
                 .background(RoundedRectangle(cornerRadius: 10).fill(Color(red: 0.055, green: 0.078, blue: 0.141)))
         )
+        .onTapGesture {
+            onSelectProject(project.slug)
+        }
         .onDrop(of: [UTType.plainText], isTargeted: $isTargeted) { providers in
             guard let provider = providers.first(where: { $0.canLoadObject(ofClass: String.self) }) else { return false }
             _ = provider.loadObject(ofClass: String.self) { value, _ in
                 guard let agentId = value else { return }
                 DispatchQueue.main.async {
-                    onAssignAgent(agentId, station.id)
+                    onAssignAgent(agentId, project.slug)
                 }
             }
             return true
@@ -432,6 +464,35 @@ private struct StationView: View {
             .frame(width: 16, height: 16)
             .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.black.opacity(0.6), lineWidth: 2))
             .shadow(color: color.opacity(0.8), radius: 6)
+    }
+}
+
+private struct ProjectActionStation: View {
+    let onOpenProject: () -> Void
+    let onCreateProject: () -> Void
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Text("SELECT / CREATE PROJECT")
+                .pixelFont(size: 8)
+                .multilineTextAlignment(.center)
+            Button("Open…") {
+                onOpenProject()
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.small)
+            Button("Create…") {
+                onCreateProject()
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.small)
+        }
+        .frame(width: 160, height: 140)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Theme.accent.opacity(0.8), style: StrokeStyle(lineWidth: 3, dash: [6]))
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color(red: 0.055, green: 0.078, blue: 0.141)))
+        )
     }
 }
 
@@ -652,15 +713,22 @@ private struct PixelSprite: View {
         "0000011111100000"
     ]
 
+    private let pixelSize: CGFloat = 2
+
     var body: some View {
         let pattern = patternRows.flatMap { row in
             row.map { $0 == "1" ? 1 : 0 }
         }
-        let columns = Array(repeating: GridItem(.flexible(), spacing: 1), count: 16)
-        LazyVGrid(columns: columns, spacing: 1) {
-            ForEach(pattern.indices, id: \.self) { idx in
-                Rectangle()
-                    .fill(pattern[idx] == 1 ? color : color.opacity(0.35))
+        VStack(spacing: 0) {
+            ForEach(0..<16, id: \.self) { row in
+                HStack(spacing: 0) {
+                    ForEach(0..<16, id: \.self) { col in
+                        let idx = row * 16 + col
+                        Rectangle()
+                            .fill(pattern[idx] == 1 ? color : color.opacity(0.35))
+                            .frame(width: pixelSize, height: pixelSize)
+                    }
+                }
             }
         }
         .padding(2)
