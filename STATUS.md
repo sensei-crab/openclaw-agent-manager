@@ -84,3 +84,8 @@
 - Summary: Built release 0.1.14 bundle (version bump only).
 - Tests: `./scripts/build-macos-release.sh` (success, 0.1.14); launched ClawAgentManager-0.1.14.app (open then quit). App bundle size: 1.0M.
 - Blockers: Manual UI smoke test still required for launch/open/close project, core flows, menu and button interactions, drag/drop, and error paths; automated UI verification still blocked by System Events/Accessibility.
+
+## 2026-03-11 (12:40)
+- Summary: Added highlight shading to 16x16 agent sprite for more robust 16-bit look; built release 0.1.15 bundle.
+- Tests: `./scripts/build-macos-release.sh` (success, 0.1.15); launched ClawAgentManager-0.1.15.app (open then quit). App bundle size: 1.0M. Menu/button interaction, project open/close, core flows, error paths, and smoke test still not verifiable headlessly.
+- Blockers: Manual UI smoke test still required for launch/open/close project, core flows, menu and button interactions, drag/drop, and error paths; automated UI verification still blocked by System Events/Accessibility.

@@ -719,13 +719,18 @@ private struct PixelSprite: View {
         let pattern = patternRows.flatMap { row in
             row.map { $0 == "1" ? 1 : 0 }
         }
+        let base = color.opacity(0.75)
+        let highlight = color
+        let shadow = color.opacity(0.35)
         VStack(spacing: 0) {
             ForEach(0..<16, id: \.self) { row in
                 HStack(spacing: 0) {
                     ForEach(0..<16, id: \.self) { col in
                         let idx = row * 16 + col
+                        let lit = pattern[idx] == 1
+                        let useHighlight = lit && row < 6 && col < 8
                         Rectangle()
-                            .fill(pattern[idx] == 1 ? color : color.opacity(0.35))
+                            .fill(lit ? (useHighlight ? highlight : base) : shadow)
                             .frame(width: pixelSize, height: pixelSize)
                     }
                 }
