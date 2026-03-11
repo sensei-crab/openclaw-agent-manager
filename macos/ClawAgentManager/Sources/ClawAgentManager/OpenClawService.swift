@@ -50,6 +50,12 @@ struct OpenClawService {
         let res = await run(["agents", "delete", id, "--force"])
         return (res.ok, (res.stderr.isEmpty ? res.stdout : res.stderr))
     }
+
+    static func sendScopingPrompt() async -> (ok: Bool, message: String) {
+        let text = "I see you want to create a new project. Let’s scope it out together."
+        let res = await run(["system", "event", "--mode", "now", "--text", text])
+        return (res.ok, (res.stderr.isEmpty ? res.stdout : res.stderr))
+    }
 }
 
 struct AgentModel: Identifiable, Decodable {

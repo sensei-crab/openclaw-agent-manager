@@ -164,6 +164,12 @@ struct ContentView: View {
             appState.setStatus("Project created")
             createProjectName = ""
             Task { await refreshAll() }
+            Task {
+                let res = await OpenClawService.sendScopingPrompt()
+                await MainActor.run {
+                    appendLog("[scoping prompt] \(res.ok ? "OK" : "ERR") \(res.message.trimmingCharacters(in: .whitespacesAndNewlines))")
+                }
+            }
             openProject(project.slug)
         } else {
             appState.setError(result.message)

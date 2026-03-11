@@ -34,3 +34,8 @@
 - Summary: Added Create Project sheet wired to menu bar/File menu for project creation flow.
 - Tests: `swift run` (build + launch). Unable to verify menu/button interactions, project open/close, or error paths headlessly; needs manual UI smoke test.
 - Blockers: Manual UI verification still required for menu/button interactions, open/close project, core flows, error paths.
+
+## 2026-03-11 (00:26)
+- Summary: Triggered OpenClaw scoping prompt when creating a new project; logged scoping prompt result to system log.
+- Tests: `swift run` (build + launch). Unable to verify menus/buttons, open/close project, core flows, or error paths headlessly (System Events/Accessibility needed for UI automation).
+- Blockers: Manual UI smoke test still required for menu/button interactions, open/close project, core flows, error paths.
