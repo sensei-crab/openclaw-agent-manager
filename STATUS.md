@@ -99,3 +99,8 @@
 - Summary: Built release 0.1.17 bundle (version bump only).
 - Tests: `swift test --disable-sandbox -Xswiftc -gnone` (fails: no tests found); `./scripts/build-macos-release.sh` (success, 0.1.17); launched ClawAgentManager-0.1.17.app (open then quit). App bundle size: 1.0M. Menu/button interaction, open/close project, core flows, drag/drop, error paths, and full smoke test still not verifiable headlessly.
 - Blockers: Manual UI smoke test still required for launch/open/close project, core flows, menu and button interactions, drag/drop, and error paths; automated UI verification still blocked by System Events/Accessibility.
+
+## 2026-03-11 (15:33)
+- Summary: Built release 0.1.18 bundle (version bump only).
+- Tests: `swift test --disable-sandbox -Xswiftc -gnone` (fails: no tests found); `./scripts/build-macos-release.sh` (success, 0.1.18); launched ClawAgentManager-0.1.18.app (open then quit). App bundle size: 1.0M. Menu/button interaction, open/close project, core flows, drag/drop, error paths, and full smoke test still not verifiable headlessly.
+- Blockers: Manual UI smoke test still required for launch/open/close project, core flows, menu and button interactions, drag/drop, and error paths; automated UI verification still blocked by System Events/Accessibility.
