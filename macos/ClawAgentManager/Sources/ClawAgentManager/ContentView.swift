@@ -633,19 +633,30 @@ private struct AgentAvatarView: View {
 private struct PixelSprite: View {
     let color: Color
 
-    private let pattern: [Int] = [
-        0,0,1,1,1,1,0,0,
-        0,1,1,1,1,1,1,0,
-        1,1,0,1,1,0,1,1,
-        1,1,1,1,1,1,1,1,
-        1,1,1,1,1,1,1,1,
-        1,1,0,1,1,0,1,1,
-        0,1,1,1,1,1,1,0,
-        0,0,1,1,1,1,0,0
+    private let patternRows: [String] = [
+        "0000011111100000",
+        "0001111111111000",
+        "0011110000111100",
+        "0111101111011110",
+        "0111111111111110",
+        "1111111111111111",
+        "1111001111001111",
+        "1111011111011111",
+        "1111011111011111",
+        "1111001111001111",
+        "1111111111111111",
+        "0111111111111110",
+        "0111101111011110",
+        "0011110000111100",
+        "0001111111111000",
+        "0000011111100000"
     ]
 
     var body: some View {
-        let columns = Array(repeating: GridItem(.flexible(), spacing: 1), count: 8)
+        let pattern = patternRows.flatMap { row in
+            row.map { $0 == "1" ? 1 : 0 }
+        }
+        let columns = Array(repeating: GridItem(.flexible(), spacing: 1), count: 16)
         LazyVGrid(columns: columns, spacing: 1) {
             ForEach(pattern.indices, id: \.self) { idx in
                 Rectangle()

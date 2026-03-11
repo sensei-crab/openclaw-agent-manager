@@ -49,3 +49,13 @@
 - Summary: Ran Swift build/tests to keep pipeline warm; no code changes. Release build skipped (outside 08:00–23:00 window).
 - Tests: `swift test` (fails: no tests found); `swift build` (success). Launch/open/close/core flows/menus/buttons/error paths/smoke test not executed in this run (headless + no UI automation).
 - Blockers: Manual UI smoke test still required for menu/button interactions, open/close project, core flows, drag/drop, and error paths; no automated UI access (System Events/Accessibility).
+
+## 2026-03-11 (03:33)
+- Summary: Ran Swift debug build to keep pipeline warm; no code changes. Release build skipped (outside 08:00–23:00 window).
+- Tests: `swift build` (success). Launch/open/close/core flows/menus/buttons/error paths/smoke test not executed in this run (headless + no UI automation).
+- Blockers: Manual UI smoke test still required for menu/button interactions, open/close project, core flows, drag/drop, and error paths; no automated UI access (System Events/Accessibility).
+
+## 2026-03-11 (04:45)
+- Summary: Upgraded agent sprite to 16x16 pixel pattern to better match 16-bit visual requirement.
+- Tests: `swift test` (hung during build; terminated); `swift build` (hung during build/link; terminated). Launch/open/close/core flows/menus/buttons/error paths/smoke test not executed in this run (headless + no UI automation).
+- Blockers: Swift build/test hang needs investigation; manual UI smoke test still required for menu/button interactions, open/close project, core flows, drag/drop, and error paths; no automated UI access (System Events/Accessibility).
