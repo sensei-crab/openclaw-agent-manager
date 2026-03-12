@@ -124,3 +124,8 @@
 - Summary: Built release 0.1.22 bundle; verified menu presence and invoked menu items via System Events (Agents/Projects menus respond); created release/test ticket.
 - Tests: `swift test --disable-sandbox -Xswiftc -gnone` (fails: no tests found); `./scripts/build-macos-release.sh` (success, 0.1.22); launched ClawAgentManager-0.1.22.app; System Events menu checks: listed menu bar items, listed Agents/Projects menu items, clicked Refresh Agents and Open/Create Project menu items (dismissed sheets via Escape). App bundle size: 1.0M. Launch/open/close project, core flows, button interactions, drag/drop, error paths, and full smoke test still not verifiable headlessly.
 - Blockers: Manual UI smoke test still required for launch/open/close project, core flows, menu and button interactions, drag/drop, and error paths; automated button interaction coverage limited to menu item invocations.
+
+## 2026-03-11 (20:46)
+- Summary: Built release 0.1.23 bundle; verified custom menus by menu bar index (File/Agents/Projects/Help) and invoked all items; attempted UI button automation but System Events reports 0 windows.
+- Tests: `./scripts/build-macos-release.sh` (success, 0.1.23); launched ClawAgentManager-0.1.23.app; `osascript` menu checks via menu bar item 6/7/8/9 to invoke Open/Create/Close Project, Grant Access, Add/Refresh Agents, and Help (dismissed sheets via Escape). `osascript` window count returned 0, so button/tab interactions could not be executed. App bundle size: 1.0M.
+- Blockers: Manual UI smoke test still required for launch/open/close project, core flows, button interactions, drag/drop, and error paths; System Events reports 0 windows for ClawAgentManager, blocking UI automation beyond menus.

@@ -15,6 +15,17 @@
 - Use manual UI interaction if automation is blocked by System Events/Accessibility.
 - If automated checks fail, record exact error output.
 
+## Results (2026-03-11 20:46 ET)
+- Release build: SUCCESS (0.1.23)
+- App launch: SUCCESS (opened app bundle)
+- Menu verification: PARTIAL (System Events menu bar access OK via menu bar item 6/7/8/9; invoked Open/Create/Close/Grant Access + Add/Refresh + Help; dismissed sheets via Escape)
+- Button interactions: BLOCKED (System Events reports 0 windows; cannot click tabs/buttons)
+- Open/close project: BLOCKED (no UI window detected to select project; menu items invoked but sheet not verifiable)
+- Error paths: PARTIAL (Create Project sheet invoked via menu; unable to confirm validation/error due to missing window)
+- Smoke test: PARTIAL (menu flows only)
+- Bundle size: 1.0M (<500MB)
+- Blocker: System Events reports 0 windows for ClawAgentManager, preventing UI button/test automation.
+
 ## Button-Functionality Checks
 - Verify toolbar/in-view buttons respond to clicks.
 - Verify menus are present and each menu item performs the intended action.
