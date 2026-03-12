@@ -103,7 +103,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             let windows = NSApp.windows
-            NSLog("ClawAgentManager windows: \(windows.count) \(windows.map { $0.title })")
+            let descriptions = windows.map { window in
+                let title = window.title
+                let identifier = window.identifier?.rawValue ?? "nil"
+                let axId = window.accessibilityIdentifier()
+                return "\(title) [id=\(identifier) ax=\(axId) visible=\(window.isVisible)]"
+            }
+            NSLog("ClawAgentManager windows: \(windows.count) \(descriptions)")
         }
     }
 

@@ -62,6 +62,7 @@ struct ContentView: View {
             window.isMovableByWindowBackground = false
             window.setFrameAutosaveName("ClawAgentManagerMain")
             window.identifier = NSUserInterfaceItemIdentifier("ClawAgentManagerMain")
+            window.setAccessibilityIdentifier("ClawAgentManagerMainWindow")
             window.isReleasedWhenClosed = false
             window.level = .normal
             window.makeKeyAndOrderFront(nil)

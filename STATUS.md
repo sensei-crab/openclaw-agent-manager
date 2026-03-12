@@ -164,3 +164,8 @@
 - Summary: Tweaked main window configuration (title visibility, identifier, level) to improve accessibility detection; System Events still reports 0 windows when running debug binary.
 - Tests: `swift build -c debug --disable-sandbox -Xswiftc -gnone` (success); launched `./.build/debug/ClawAgentManager`; `osascript` window count returned 0; quit app.
 - Blockers: System Events still reports 0 windows (blocks automated button/tab verification). Manual UI smoke test still required for launch/open/close project, core flows, menu/button interactions, drag/drop, and error paths.
+
+## 2026-03-12 (05:17)
+- Summary: Added explicit accessibility identifier on main window and expanded launch logging for window identifiers/visibility. System Events still reports 0 windows.
+- Tests: `swift build -c debug --disable-sandbox -Xswiftc -gnone` (success); launched `./.build/debug/ClawAgentManager`; NSApp logged 2 windows with identifiers; `osascript` window count returned 0; menu bar items listed; app quit. Release build skipped (outside 08:00–23:00 window).
+- Blockers: System Events still reports 0 windows (blocks automated button/tab verification). Manual UI smoke test still required for launch/open/close project, core flows, menu/button interactions, drag/drop, and error paths.
