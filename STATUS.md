@@ -18,7 +18,7 @@
 ## 2026-03-10 (20:51)
 - Summary: Built release 0.1.8 bundle.
 - Tests: `./scripts/build-macos-release.sh` (success); launched 0.1.8 app; attempted AppleScript menu click (System Events menu bar not accessible). App bundle size: 988K.
-- Blockers: Automated menu/button verification still blocked by System Events/Accessibility; manual UI smoke test still needed for full checklist.
+- Blockers: Automated menu/button verification still blocked by System Events/Accessibility; manual UI smoke test still needed for full checklist (open/close project, core flows, button interactions, error paths).
 
 ## 2026-03-10 (21:35)
 - Summary: Fixed missing ContentView state, built release 0.1.9 bundle.
@@ -128,4 +128,9 @@
 ## 2026-03-11 (20:46)
 - Summary: Built release 0.1.23 bundle; verified custom menus by menu bar index (File/Agents/Projects/Help) and invoked all items; attempted UI button automation but System Events reports 0 windows.
 - Tests: `./scripts/build-macos-release.sh` (success, 0.1.23); launched ClawAgentManager-0.1.23.app; `osascript` menu checks via menu bar item 6/7/8/9 to invoke Open/Create/Close Project, Grant Access, Add/Refresh Agents, and Help (dismissed sheets via Escape). `osascript` window count returned 0, so button/tab interactions could not be executed. App bundle size: 1.0M.
+- Blockers: Manual UI smoke test still required for launch/open/close project, core flows, button interactions, drag/drop, and error paths; System Events reports 0 windows for ClawAgentManager, blocking UI automation beyond menus.
+
+## 2026-03-11 (21:56)
+- Summary: Built release 0.1.24 bundle; validated custom menu items by index (File/Agents/Projects/Help) after confirming default File menu sits at index 3 and app File menu at index 6.
+- Tests: `./scripts/build-macos-release.sh` (success, 0.1.24); launched ClawAgentManager-0.1.24.app; `osascript` menu bar item listing; invoked Open/Create/Close Project, Grant Access, Add/Refresh Agents, Create/Open/Refresh Projects, and Help via menu bar item 6/7/8/9; dismissed sheets with Escape; System Events window count returned 0; quit attempt returned user-canceled (forced quit via pkill). App bundle size: 1.0M.
 - Blockers: Manual UI smoke test still required for launch/open/close project, core flows, button interactions, drag/drop, and error paths; System Events reports 0 windows for ClawAgentManager, blocking UI automation beyond menus.
