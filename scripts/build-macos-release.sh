@@ -43,10 +43,14 @@ cat > "$APP_BUNDLE/Contents/Info.plist" <<EOF
   <key>CFBundleExecutable</key><string>$APP_NAME</string>
   <key>CFBundleIdentifier</key><string>ai.openclaw.claw-agent-manager</string>
   <key>CFBundleName</key><string>$APP_NAME</string>
+  <key>CFBundlePackageType</key><string>APPL</string>
   <key>CFBundleShortVersionString</key><string>$NEW_VERSION</string>
   <key>CFBundleVersion</key><string>$NEW_VERSION</string>
   <key>CFBundleIconFile</key><string>AppIcon</string>
   <key>LSMinimumSystemVersion</key><string>14.0</string>
+  <key>NSHighResolutionCapable</key><true/>
+  <key>NSPrincipalClass</key><string>NSApplication</string>
+  <key>NSMainNibFile</key><string></string>
 </dict>
 </plist>
 EOF
