@@ -179,3 +179,8 @@
 - Summary: Tried to make SwiftUI window visible to System Events by forcing standard window style mask + Windows menu inclusion; window count still 0 in accessibility despite NSApp reporting 2 windows.
 - Tests: `swift build -c debug --disable-sandbox -Xswiftc -gnone` (success); launched `./.build/debug/ClawAgentManager`; `osascript` window count returned 0; menus visible; app quit.
 - Blockers: System Events still reports 0 windows (blocks automated button/tab verification). Manual UI smoke test still required for launch/open/close project, core flows, menu/button interactions, drag/drop, and error paths.
+
+## 2026-03-12 (08:25)
+- Summary: Built release 0.1.26 bundle (version bump via build script); attempted menu automation with app activation, still blocked by System Events menu bar/window access.
+- Tests: `swift test --disable-sandbox -Xswiftc -gnone` (root: failed; no Package.swift); `swift test --disable-sandbox -Xswiftc -gnone` in macos/ClawAgentManager (fails: no tests found); `./scripts/build-macos-release.sh` (success, 0.1.26); launched ClawAgentManager-0.1.26.app; System Events menu bar access failed (Invalid index); window count returned 0; quit/forced quit. App bundle size: 1.0M.
+- Blockers: System Events still reports no menu bar/windows for ClawAgentManager (blocks automated button/tab verification). Manual UI smoke test still required for launch/open/close project, core flows, menu/button interactions, drag/drop, and error paths.
