@@ -54,6 +54,13 @@ struct ContentView: View {
             .padding(16)
         }
         .frame(minWidth: 1100, minHeight: 700)
+        .background(WindowAccessor { window in
+            guard let window else { return }
+            window.title = "Claw Agent Manager"
+            window.setFrameAutosaveName("ClawAgentManagerMain")
+            window.isReleasedWhenClosed = false
+            window.makeKeyAndOrderFront(nil)
+        })
         .sheet(isPresented: $appState.showAbout) {
             AboutView()
         }
@@ -841,6 +848,24 @@ private struct CreateProjectSheet: View {
         }
         .padding(20)
         .frame(width: 360)
+    }
+}
+
+private struct WindowAccessor: NSViewRepresentable {
+    let onResolve: (NSWindow?) -> Void
+
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        DispatchQueue.main.async {
+            self.onResolve(view.window)
+        }
+        return view
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+        DispatchQueue.main.async {
+            self.onResolve(nsView.window)
+        }
     }
 }
 

@@ -101,6 +101,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 window.makeKeyAndOrderFront(nil)
             }
         }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            let windows = NSApp.windows
+            NSLog("ClawAgentManager windows: \(windows.count) \(windows.map { $0.title })")
+        }
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {

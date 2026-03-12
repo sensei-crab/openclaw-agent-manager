@@ -149,3 +149,8 @@
 - Summary: Added AppDelegate activation policy + window bring-to-front on launch/reopen to help accessibility automation detect windows; still seeing 0 windows via System Events when running debug binary. Release build skipped (outside 08:00–23:00 window).
 - Tests: `swift build -c debug --disable-sandbox -Xswiftc -gnone` (success); `swift run -c debug -Xswiftc -gnone` (launched); `osascript` window count for process "ClawAgentManager" returned 0.
 - Blockers: Manual UI smoke test still required for launch/open/close project, core flows, menu/button interactions, drag/drop, and error paths; System Events still reports 0 windows for ClawAgentManager (blocks automated button/tab verification). Consider testing using packaged .app bundle in release window or adjusting window creation to be accessible to System Events.
+
+## 2026-03-12 (02:10)
+- Summary: Added WindowAccessor to force main window title + autosave and log NSApp window count on launch to diagnose accessibility. NSApp reports 2 windows ("Claw Agent Manager", "Item-0") but System Events still returns 0 windows.
+- Tests: `swift run -c debug --disable-sandbox -Xswiftc -gnone` (success); NSApp log shows 2 windows; `osascript` window count for process "ClawAgentManager" returned 0. Release build skipped (outside 08:00–23:00 window).
+- Blockers: System Events still reports 0 windows (blocks automated button/tab verification). Manual UI smoke test still required for launch/open/close project, core flows, menu/button interactions, drag/drop, and error paths.
