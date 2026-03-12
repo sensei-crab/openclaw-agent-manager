@@ -134,3 +134,8 @@
 - Summary: Built release 0.1.24 bundle; validated custom menu items by index (File/Agents/Projects/Help) after confirming default File menu sits at index 3 and app File menu at index 6.
 - Tests: `./scripts/build-macos-release.sh` (success, 0.1.24); launched ClawAgentManager-0.1.24.app; `osascript` menu bar item listing; invoked Open/Create/Close Project, Grant Access, Add/Refresh Agents, Create/Open/Refresh Projects, and Help via menu bar item 6/7/8/9; dismissed sheets with Escape; System Events window count returned 0; quit attempt returned user-canceled (forced quit via pkill). App bundle size: 1.0M.
 - Blockers: Manual UI smoke test still required for launch/open/close project, core flows, button interactions, drag/drop, and error paths; System Events reports 0 windows for ClawAgentManager, blocking UI automation beyond menus.
+
+## 2026-03-11 (22:55)
+- Summary: Built release 0.1.25 bundle; re-ran menu automation with app activation. System Events still reports 0 windows (buttons/tabs not automatable).
+- Tests: `swift test --disable-sandbox -Xswiftc -gnone` (fails: no tests found); `./scripts/build-macos-release.sh` (success, 0.1.25); launched ClawAgentManager-0.1.25.app; activated app; `osascript` menu bar items listed; invoked Open/Create/Close Project, Grant Access, Add/Refresh Agents, Create/Open/Refresh Projects, and Help via menu bar item 6/7/8/9; dismissed sheets via Escape; System Events window count returned 0; quit attempt returned user-canceled (forced quit via pkill). App bundle size: 1.0M.
+- Blockers: Manual UI smoke test still required for launch/open/close project, core flows, button interactions, drag/drop, and error paths; System Events reports 0 windows for ClawAgentManager, blocking UI automation beyond menus.
