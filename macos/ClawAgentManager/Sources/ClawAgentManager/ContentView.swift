@@ -57,8 +57,13 @@ struct ContentView: View {
         .background(WindowAccessor { window in
             guard let window else { return }
             window.title = "Claw Agent Manager"
+            window.titleVisibility = .visible
+            window.titlebarAppearsTransparent = false
+            window.isMovableByWindowBackground = false
             window.setFrameAutosaveName("ClawAgentManagerMain")
+            window.identifier = NSUserInterfaceItemIdentifier("ClawAgentManagerMain")
             window.isReleasedWhenClosed = false
+            window.level = .normal
             window.makeKeyAndOrderFront(nil)
         })
         .sheet(isPresented: $appState.showAbout) {

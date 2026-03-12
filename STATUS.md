@@ -154,3 +154,13 @@
 - Summary: Added WindowAccessor to force main window title + autosave and log NSApp window count on launch to diagnose accessibility. NSApp reports 2 windows ("Claw Agent Manager", "Item-0") but System Events still returns 0 windows.
 - Tests: `swift run -c debug --disable-sandbox -Xswiftc -gnone` (success); NSApp log shows 2 windows; `osascript` window count for process "ClawAgentManager" returned 0. Release build skipped (outside 08:00–23:00 window).
 - Blockers: System Events still reports 0 windows (blocks automated button/tab verification). Manual UI smoke test still required for launch/open/close project, core flows, menu/button interactions, drag/drop, and error paths.
+
+## 2026-03-12 (03:12)
+- Summary: Re-tested debug build and System Events window detection with direct executable; menus still visible but window count remains 0.
+- Tests: `swift build -c debug --disable-sandbox -Xswiftc -gnone` (success); launched `./.build/debug/ClawAgentManager`; `osascript` window count returned 0; menu bar items listed (Apple, ClawAgentManager, File, Edit, View, File, Agents, Projects, Help, Window, Help). Release build skipped (outside 08:00–23:00 window).
+- Blockers: System Events still reports 0 windows (blocks automated button/tab verification). Manual UI smoke test still required for launch/open/close project, core flows, menu/button interactions, drag/drop, and error paths.
+
+## 2026-03-12 (04:12)
+- Summary: Tweaked main window configuration (title visibility, identifier, level) to improve accessibility detection; System Events still reports 0 windows when running debug binary.
+- Tests: `swift build -c debug --disable-sandbox -Xswiftc -gnone` (success); launched `./.build/debug/ClawAgentManager`; `osascript` window count returned 0; quit app.
+- Blockers: System Events still reports 0 windows (blocks automated button/tab verification). Manual UI smoke test still required for launch/open/close project, core flows, menu/button interactions, drag/drop, and error paths.
