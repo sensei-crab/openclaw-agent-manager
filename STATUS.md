@@ -189,3 +189,8 @@
 - Summary: Built release 0.1.27 bundle (version bump per build); attempted System Events menu access and window detection; menu bar still inaccessible and window count remains 0.
 - Tests: `swift test --disable-sandbox -Xswiftc -gnone` (fails: no tests found); `./scripts/build-macos-release.sh` (success, 0.1.27); launched ClawAgentManager-0.1.27.app; System Events menu bar access failed (Invalid index/hang); window count returned 0; quit via pkill. App bundle size: 1.1M.
 - Blockers: System Events still reports no menu bar/windows for ClawAgentManager (blocks automated button/tab verification). Manual UI smoke test still required for launch/open/close project, core flows, menu/button interactions, drag/drop, and error paths.
+
+## 2026-03-12 (10:45)
+- Summary: Built release 0.1.28 bundle (version bump via build script); attempted System Events menu bar query after launch, but osascript hung and was terminated.
+- Tests: `swift test --disable-sandbox -Xswiftc -gnone` (fails: no tests found); `./scripts/build-macos-release.sh` (success, 0.1.28); launched ClawAgentManager-0.1.28.app; attempted `osascript` menu bar listing (hang/terminated); quit via pkill. App bundle size: 1.1M.
+- Blockers: System Events menu/window access still unreliable (hangs) so automated menu/button verification blocked; manual UI smoke test still required for launch/open/close project, core flows, menu/button interactions, drag/drop, and error paths.
