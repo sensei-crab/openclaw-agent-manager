@@ -169,3 +169,13 @@
 - Summary: Added explicit accessibility identifier on main window and expanded launch logging for window identifiers/visibility. System Events still reports 0 windows.
 - Tests: `swift build -c debug --disable-sandbox -Xswiftc -gnone` (success); launched `./.build/debug/ClawAgentManager`; NSApp logged 2 windows with identifiers; `osascript` window count returned 0; menu bar items listed; app quit. Release build skipped (outside 08:00–23:00 window).
 - Blockers: System Events still reports 0 windows (blocks automated button/tab verification). Manual UI smoke test still required for launch/open/close project, core flows, menu/button interactions, drag/drop, and error paths.
+
+## 2026-03-12 (06:20)
+- Summary: Ran debug build/tests with -gnone to avoid dsymutil hang; verified menu bar visibility via System Events; window count still 0 despite NSApp reporting 2 windows.
+- Tests: `swift build -c debug --disable-sandbox -Xswiftc -gnone` (success); `swift test --disable-sandbox -Xswiftc -gnone` (fails: no tests found). Launched `./.build/debug/ClawAgentManager`; System Events menu bar items listed; window count returned 0; app quit. Release build skipped (before 08:00).
+- Blockers: System Events still reports 0 windows (blocks automated button/tab verification). Manual UI smoke test still required for launch/open/close project, core flows, menu/button interactions, drag/drop, and error paths.
+
+## 2026-03-12 (07:25)
+- Summary: Tried to make SwiftUI window visible to System Events by forcing standard window style mask + Windows menu inclusion; window count still 0 in accessibility despite NSApp reporting 2 windows.
+- Tests: `swift build -c debug --disable-sandbox -Xswiftc -gnone` (success); launched `./.build/debug/ClawAgentManager`; `osascript` window count returned 0; menus visible; app quit.
+- Blockers: System Events still reports 0 windows (blocks automated button/tab verification). Manual UI smoke test still required for launch/open/close project, core flows, menu/button interactions, drag/drop, and error paths.

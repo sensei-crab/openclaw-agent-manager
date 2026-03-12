@@ -64,6 +64,9 @@ struct ContentView: View {
             window.identifier = NSUserInterfaceItemIdentifier("ClawAgentManagerMain")
             window.setAccessibilityIdentifier("ClawAgentManagerMainWindow")
             window.isReleasedWhenClosed = false
+            window.isExcludedFromWindowsMenu = false
+            window.styleMask.insert([.titled, .closable, .miniaturizable, .resizable])
+            window.collectionBehavior = [.fullScreenPrimary]
             window.level = .normal
             window.makeKeyAndOrderFront(nil)
         })
