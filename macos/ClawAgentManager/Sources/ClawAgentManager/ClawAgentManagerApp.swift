@@ -3,6 +3,7 @@ import AppKit
 
 @main
 struct ClawAgentManagerApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var appState = AppState()
 
     var body: some Scene {
@@ -88,5 +89,27 @@ struct ClawAgentManagerApp: App {
 
     private func menuBarTitle() -> String {
         "CAM \(menuBarVersion())"
+    }
+}
+
+final class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        NSApp.setActivationPolicy(.regular)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            NSApp.activate(ignoringOtherApps: true)
+            NSApp.windows.forEach { window in
+                window.makeKeyAndOrderFront(nil)
+            }
+        }
+    }
+
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        if !flag {
+            sender.windows.forEach { window in
+                window.makeKeyAndOrderFront(nil)
+            }
+        }
+        sender.activate(ignoringOtherApps: true)
+        return true
     }
 }

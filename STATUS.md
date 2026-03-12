@@ -139,3 +139,13 @@
 - Summary: Built release 0.1.25 bundle; re-ran menu automation with app activation. System Events still reports 0 windows (buttons/tabs not automatable).
 - Tests: `swift test --disable-sandbox -Xswiftc -gnone` (fails: no tests found); `./scripts/build-macos-release.sh` (success, 0.1.25); launched ClawAgentManager-0.1.25.app; activated app; `osascript` menu bar items listed; invoked Open/Create/Close Project, Grant Access, Add/Refresh Agents, Create/Open/Refresh Projects, and Help via menu bar item 6/7/8/9; dismissed sheets via Escape; System Events window count returned 0; quit attempt returned user-canceled (forced quit via pkill). App bundle size: 1.0M.
 - Blockers: Manual UI smoke test still required for launch/open/close project, core flows, button interactions, drag/drop, and error paths; System Events reports 0 windows for ClawAgentManager, blocking UI automation beyond menus.
+
+## 2026-03-11 (23:59)
+- Summary: Re-tested Swift debug build with `-gnone` and attempted headless window detection again; System Events still returns 0 windows even after activating app. No code changes; release build skipped (outside 08:00–23:00 window).
+- Tests: `swift build -c debug --disable-sandbox -Xswiftc -gnone` (success); launched ClawAgentManager-0.1.25.app; `osascript` window count returned 0; app quit.
+- Blockers: Manual UI smoke test still required for launch/open/close project, core flows, menu/button interactions, drag/drop, and error paths; System Events still reports 0 windows for ClawAgentManager (blocks automated button/tab verification).
+
+## 2026-03-12 (01:00)
+- Summary: Added AppDelegate activation policy + window bring-to-front on launch/reopen to help accessibility automation detect windows; still seeing 0 windows via System Events when running debug binary. Release build skipped (outside 08:00–23:00 window).
+- Tests: `swift build -c debug --disable-sandbox -Xswiftc -gnone` (success); `swift run -c debug -Xswiftc -gnone` (launched); `osascript` window count for process "ClawAgentManager" returned 0.
+- Blockers: Manual UI smoke test still required for launch/open/close project, core flows, menu/button interactions, drag/drop, and error paths; System Events still reports 0 windows for ClawAgentManager (blocks automated button/tab verification). Consider testing using packaged .app bundle in release window or adjusting window creation to be accessible to System Events.
