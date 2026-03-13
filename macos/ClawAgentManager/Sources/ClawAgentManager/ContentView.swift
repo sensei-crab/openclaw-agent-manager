@@ -265,6 +265,8 @@ private struct TopTabs: View {
                         .cornerRadius(6)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("\(tab.rawValue) Tab")
+                .accessibilityIdentifier("TopTab\(tab.rawValue)")
             }
             Spacer()
         }
@@ -318,11 +320,15 @@ private struct ProjectsView: View {
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.small)
+                    .accessibilityLabel("Open Project")
+                    .accessibilityIdentifier("ProjectOpenButton")
                     Button("Close") {
                         onCloseProject()
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.small)
+                    .accessibilityLabel("Close Project")
+                    .accessibilityIdentifier("ProjectCloseButton")
                 }
 
                 ProjectStationsView(projects: projects,
@@ -498,11 +504,15 @@ private struct ProjectActionStation: View {
             }
             .buttonStyle(.bordered)
             .controlSize(.small)
+            .accessibilityLabel("Open Project")
+            .accessibilityIdentifier("ActionStationOpenProject")
             Button("Create…") {
                 onCreateProject()
             }
             .buttonStyle(.bordered)
             .controlSize(.small)
+            .accessibilityLabel("Create Project")
+            .accessibilityIdentifier("ActionStationCreateProject")
         }
         .frame(width: 160, height: 140)
         .background(
@@ -535,6 +545,8 @@ private struct AgentRow: View {
             }
             .buttonStyle(.bordered)
             .controlSize(.small)
+            .accessibilityLabel("Delete Agent")
+            .accessibilityIdentifier("DeleteAgentButton")
         }
     }
 
@@ -562,6 +574,8 @@ private struct ActionsView: View {
                 Button("CREATE PROJECT") {
                     onCreateProject()
                 }
+                .accessibilityLabel("Create Project")
+                .accessibilityIdentifier("SettingsCreateProject")
             }
 
             VStack(alignment: .leading, spacing: 6) {
@@ -570,9 +584,13 @@ private struct ActionsView: View {
                     Button("OPEN PROJECT") {
                         onOpenProject()
                     }
+                    .accessibilityLabel("Open Project")
+                    .accessibilityIdentifier("SettingsOpenProject")
                     Button("CLOSE PROJECT") {
                         onCloseProject()
                     }
+                    .accessibilityLabel("Close Project")
+                    .accessibilityIdentifier("SettingsCloseProject")
                 }
             }
 
@@ -581,6 +599,8 @@ private struct ActionsView: View {
                 Button("OPEN ADD AGENT") {
                     onAddAgent()
                 }
+                .accessibilityLabel("Open Add Agent")
+                .accessibilityIdentifier("SettingsAddAgent")
             }
         }
         .pixelFont(size: 9)
