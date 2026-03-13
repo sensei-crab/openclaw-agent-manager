@@ -15,6 +15,7 @@ struct ContentView: View {
 
     @State private var pendingDelete: AgentModel? = nil
     @State private var hasWarnedAccess: Bool = false
+    @State private var hasRunSelfTest: Bool = false
 
     var body: some View {
         ZStack {
